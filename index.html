@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>留言系统</title>
+</head>
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script type="text/javascript">
+	function getip()
+	{
+		var string_ip=returnCitySN["cip"]+','+returnCitySN["cname"];
+		return string_ip;
+	}
+</script>
+<script type="text/javascript">
+	//对Date的扩展，将 Date 转化为指定格式的String
+	//月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
+	//年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+	//例子：
+	//(new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
+	//(new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18
+	Date.prototype.Format = function (fmt) 
+	{
+		var o = 
+		{
+			"M+": this.getMonth() + 1,//月份
+			"d+": this.getDate(),//日
+			"h+": this.getHours(),//小时
+			"m+": this.getMinutes(),//分
+			"s+": this.getSeconds(),//秒
+			"q+": Math.floor((this.getMonth() + 3) / 3),//季度
+			"S": this.getMilliseconds()//毫秒
+		};
+		if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+		for (var k in o)
+		if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		return fmt;
+	}
+	function myGetTime()
+	{
+		var mytime= new Date().Format("yyyy-MM-dd hh:mm:ss");
+		return mytime;
+	}
+</script>
+<script type="text/javascript">
+	function getOSInfo()
+	{
+		return navigator.userAgent;
+	}
+</script>
+<body>
+    <form action="success.php" method="post">
+		<input type="hidden" id="clienttime" name="clienttime" />
+		<input type="hidden" id="clientip" name="clientip" />
+		<input type="hidden" id="clientosinfo" name="clientosinfo" />
+        标题:<input type="text" name="title" placeholder="在此处写下您的标题" style="width:650px;"><br/><br/>
+        留言内容:<br/><br/><textarea name="content" rows="30" cols="100" placeholder="在此处写下您的留言"></textarea><br/><br/>
+        <input type="submit" name="submit" value="发送留言">
+    </form>
+</body>
+<script type="text/javascript">
+	var myip=getip();
+	var mytime=myGetTime();
+	var myosinfo=getOSInfo();
+	document.getElementById("clienttime").value = mytime;
+	document.getElementById("clientip").value = myip;
+	document.getElementById("clientosinfo").value = myosinfo;
+	document.getElementById("clienttime").setAttribute("readOnly",'true');
+	document.getElementById("clientip").setAttribute("readOnly",'true');
+	document.getElementById("clientosinfo").setAttribute("readOnly",'true');
+</script>
+</html>
